@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {render} from "react-dom";
+import AddNewForm from "./AddNewForm"
 
 class App extends Component {
     constructor(props) {
@@ -7,8 +8,18 @@ class App extends Component {
         this.state = {
             data: [],
             loaded: false,
-            placeholder: "Loading"
+            placeholder: "Loading",
+            displayNewForm: false,
+            newName: "",
+            newEmail: "",
+            newMessage: "",
         };
+
+        this.toggleAddNewForm = this.toggleAddNewForm.bind(this);
+        this.setName = this.setName.bind(this);
+        this.setEmail = this.setEmail.bind(this);
+        this.setMessage = this.setMessage.bind(this);
+        this.saveNewLead = this.saveNewLead.bind(this);
     }
 
     componentDidMount() {
@@ -31,18 +42,52 @@ class App extends Component {
             });
     }
 
+    toggleAddNewForm() {
+        this.state.displayNewForm
+            ? this.setState({displayNewForm: false})
+            : this.setState({displayNewForm: true})
+    }
+
+    setName(newName){
+        this.setState({newName: newName});
+        debugger;
+    }
+
+    setEmail(newEmail) {
+        this.setState({newEmail: newEmail});
+        debugger;
+    }
+
+    setMessage(newMessage) {
+        this.setState({newMessage: newMessage});
+        debugger;
+    }
+
+    saveNewLead() {
+        debugger;
+    }
 
     render() {
         return (
-            <ul>
-                {this.state.data.map(contact => {
-                    return (
-                        <li key={contact.id}>
-                            {contact.name} - {contact.email}
-                        </li>
-                    );
-                })}
-            </ul>
+            <React.Fragment>
+                <ul>
+                    {this.state.data.map(contact => {
+                        return (
+                            <li key={contact.id}>
+                                {contact.name} - {contact.email}
+                            </li>
+                        );
+                    })}
+                </ul>
+                <button id="addNewButton" onClick={this.toggleAddNewForm}>Add New</button>
+                <AddNewForm
+                    isDisplayed={this.state.displayNewForm}
+                    setName={this.setName}
+                    setEmail={this.setEmail}
+                    setMessage={this.setMessage}
+                    saveNewLead={this.saveNewLead}
+                />
+            </React.Fragment>
         );
     }
 }
