@@ -48,24 +48,35 @@ class App extends Component {
             : this.setState({displayNewForm: true})
     }
 
-    setName(newName){
+    setName(newName) {
         this.setState({newName: newName});
-        debugger;
     }
 
     setEmail(newEmail) {
         this.setState({newEmail: newEmail});
-        debugger;
     }
 
     setMessage(newMessage) {
         this.setState({newMessage: newMessage});
-        debugger;
     }
 
     saveNewLead() {
-        debugger;
-    }
+        fetch("api/saveNewLead", {
+            method: 'POST',
+            body: JSON.stringify(this.state)
+        })
+            .then(response => {
+                if (response.status > 400) {
+                    return this.setState(() => {
+                        return {placeholder: "Something went wrong!"};
+                    });
+                }
+                return response.json();
+            })
+            .then(() => {
+                self.location = self.location;
+            });
+    };
 
     render() {
         return (
