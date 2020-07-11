@@ -71,12 +71,14 @@ class App extends Component {
                         return {placeholder: "Something went wrong!"};
                     });
                 }
-                return response.json();
-            })
-            .then(() => {
                 self.location = self.location;
-            });
+            })
+
     };
+
+    delete_lead() {
+        alert("delete")
+    }
 
     render() {
         return (
@@ -85,8 +87,11 @@ class App extends Component {
                     {this.state.data.map(contact => {
                         return (
                             <li key={contact.id}>
-                                {contact.name} - {contact.email}
+                                {contact.name} - {contact.email} - {contact.message}
+                                <input type="checkbox" name={contact.id} data-id={contact.id}/>
                             </li>
+
+
                         );
                     })}
                 </ul>
