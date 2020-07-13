@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {render} from "react-dom";
-import AddNewForm from "./AddNewForm"
+import AddNewForm from "./AddNewForm";
+import RemoveLeadButton from './removeLeadButton';
 
 class App extends Component {
     constructor(props) {
@@ -13,6 +14,7 @@ class App extends Component {
             newName: "",
             newEmail: "",
             newMessage: "",
+            selected:[],
         };
 
         this.toggleAddNewForm = this.toggleAddNewForm.bind(this);
@@ -20,6 +22,8 @@ class App extends Component {
         this.setEmail = this.setEmail.bind(this);
         this.setMessage = this.setMessage.bind(this);
         this.saveNewLead = this.saveNewLead.bind(this);
+        this.removeLeadFunction = this.removeLeadFunction.bind(this);
+        this.updateSelectedLeads = this.updateSelectedLeads.bind(this);
     }
 
     componentDidMount() {
@@ -76,8 +80,21 @@ class App extends Component {
 
     };
 
-    delete_lead() {
-        alert("delete")
+    removeLeadFunction () {
+
+    };
+
+    updateSelectedLeads(checkbox) {
+        const id = checkbox.dataset.id;
+        let current = this.state.selected;
+        if(current.indexOf(id) > -1) {
+            current.splice(current.indexOf(id), 1);
+        }else{
+            current.push(id);
+        }
+
+        this.setState({selected: current});
+
     }
 
     render() {
@@ -88,20 +105,34 @@ class App extends Component {
                         return (
                             <li key={contact.id}>
                                 {contact.name} - {contact.email} - {contact.message}
-                                <input type="checkbox" name={contact.id} data-id={contact.id}/>
+                                <input
+                                    type="checkbox"
+                                    name={contact.id}
+                                    data-id={contact.id}
+                                    className="leadCheckbox"
+                                    onChange={(e) => this.updateSelectedLeads(e.target)}
+                                />
                             </li>
 
 
                         );
                     })}
                 </ul>
-                <button id="addNewButton" onClick={this.toggleAddNewForm}>Add New</button>
+                <button
+                    id="addNewButton"
+                    onClick={this.toggleAddNewForm}
+                >
+                    Add New
+                </button>
                 <AddNewForm
                     isDisplayed={this.state.displayNewForm}
                     setName={this.setName}
                     setEmail={this.setEmail}
                     setMessage={this.setMessage}
                     saveNewLead={this.saveNewLead}
+                />
+                <RemoveLeadButton
+                    removeLeadFunction={this.removeLeadFunction}
                 />
             </React.Fragment>
         );
