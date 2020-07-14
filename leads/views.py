@@ -24,3 +24,12 @@ def add_new_lead(request):
 
     return HttpResponse('success')
 
+
+def remove_leads(request):
+    data = request.body
+    data = json.loads(data)
+    leads_to_remove_array = data["leads_to_remove"]
+    leads_to_remove = Lead.objects.filter(id__in=leads_to_remove_array)
+    leads_to_remove.delete()
+    return HttpResponse('success')
+

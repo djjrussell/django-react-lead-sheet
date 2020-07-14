@@ -75,12 +75,24 @@ class App extends Component {
                         return {placeholder: "Something went wrong!"};
                     });
                 }
-                self.location = self.location;
+                location.reload();
             })
 
     };
 
     removeLeadFunction () {
+        fetch("api/removeLeads", {
+            method: 'POST',
+            body: JSON.stringify({leads_to_remove: this.state.selected})
+        })
+            .then(response => {
+                if (response.status > 400) {
+                    return this.setState(() => {
+                        return {placeholder: "Something went wrong!"};
+                    });
+                }
+                location.reload();
+            })
 
     };
 
