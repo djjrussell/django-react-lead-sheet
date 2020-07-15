@@ -27,7 +27,7 @@ const AddNewForm = (props) => {
                 <label>
                     Message
                     <br/>
-                    <input name="message" id="message" onBlur={(e) => setMessage(e.target.value)}/>
+                    <textarea name="message" id="message" onBlur={(e) => setMessage(e.target.value)}/>
                 </label>
             </div>
             <br/>

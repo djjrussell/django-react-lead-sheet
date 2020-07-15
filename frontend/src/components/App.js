@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {render} from "react-dom";
 import AddNewForm from "./AddNewForm";
 import RemoveLeadButton from './removeLeadButton';
+import Dialog from './Dialog';
 
 class App extends Component {
     constructor(props) {
@@ -15,6 +16,10 @@ class App extends Component {
             newEmail: "",
             newMessage: "",
             selected:[],
+            dialogShown: false,
+            dialogName: "",
+            dialogEmail: "",
+            dialogMessage: "",
         };
 
         this.toggleAddNewForm = this.toggleAddNewForm.bind(this);
@@ -23,7 +28,8 @@ class App extends Component {
         this.setMessage = this.setMessage.bind(this);
         this.saveNewLead = this.saveNewLead.bind(this);
         this.removeLeadFunction = this.removeLeadFunction.bind(this);
-        this.updateSelectedLeads = this.updateSelectedLeads.bind(this);
+        this.updateSelectedLeadsArray = this.updateSelectedLeadsArray.bind(this);
+        this.cancelDialog = this.cancelDialog.bind(this);
     }
 
     componentDidMount() {
@@ -96,7 +102,7 @@ class App extends Component {
 
     };
 
-    updateSelectedLeads(checkbox) {
+    updateSelectedLeadsArray(checkbox) {
         const id = checkbox.dataset.id;
         let current = this.state.selected;
         if(current.indexOf(id) > -1) {
@@ -107,6 +113,32 @@ class App extends Component {
 
         this.setState({selected: current});
 
+    }
+
+    showDialog (data) {
+        const {
+            id,
+            name,
+            email,
+            message
+        } = data;
+
+        this.setState({
+            dialogShown: true,
+            dialogName: name,
+            dialogEmail: email,
+            dialogMessage: message,
+        });
+
+    }
+
+    cancelDialog() {
+        this.setState({
+            dialogShown: false,
+            dialogName: "",
+            dialogEmail: "",
+            dialogMessage: "",
+        })
     }
 
     render() {
@@ -122,8 +154,18 @@ class App extends Component {
                                     name={contact.id}
                                     data-id={contact.id}
                                     className="leadCheckbox"
-                                    onChange={(e) => this.updateSelectedLeads(e.target)}
+                                    onChange={(e) => this.updateSelectedLeadsArray(e.target)}
                                 />
+                                <button
+                                    className="editButton"
+                                    data-name={contact.name}
+                                    data-email={contact.email}
+                                    data-message={contact.message}
+                                    data-id={contact.id}
+                                    onClick={(e) => this.showDialog(e.target.dataset)}
+                                >
+                                    edit
+                                </button>
                             </li>
 
 
@@ -136,6 +178,9 @@ class App extends Component {
                 >
                     Add New
                 </button>
+                <RemoveLeadButton
+                    removeLeadFunction={this.removeLeadFunction}
+                />
                 <AddNewForm
                     isDisplayed={this.state.displayNewForm}
                     setName={this.setName}
@@ -143,8 +188,12 @@ class App extends Component {
                     setMessage={this.setMessage}
                     saveNewLead={this.saveNewLead}
                 />
-                <RemoveLeadButton
-                    removeLeadFunction={this.removeLeadFunction}
+                <Dialog
+                    dialogShown={this.state.dialogShown}
+                    name={this.state.dialogName}
+                    email={this.state.dialogEmail}
+                    message={this.state.dialogMessage}
+                    cancelCallback={this.cancelDialog}
                 />
             </React.Fragment>
         );
