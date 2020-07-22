@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import {render} from "react-dom";
-import AddNewForm from "./AddNewForm";
 import RemoveLeadButton from './removeLeadButton';
 import Dialog from './Dialog';
 
@@ -12,23 +11,22 @@ class App extends Component {
             loaded: false,
             placeholder: "Loading",
             displayNewForm: false,
-            newName: "",
-            newEmail: "",
-            newMessage: "",
-            selected:[],
+            selected: [],
             dialogShown: false,
-            dialogName: "",
-            dialogEmail: "",
-            dialogMessage: "",
+            leadId: 0,
+            leadName: "",
+            leadEmail: "",
+            leadMessage: "",
         };
 
         this.toggleAddNewForm = this.toggleAddNewForm.bind(this);
         this.setName = this.setName.bind(this);
         this.setEmail = this.setEmail.bind(this);
         this.setMessage = this.setMessage.bind(this);
-        this.saveNewLead = this.saveNewLead.bind(this);
+        this.addEditLead = this.addEditLead.bind(this);
         this.removeLeadFunction = this.removeLeadFunction.bind(this);
         this.updateSelectedLeadsArray = this.updateSelectedLeadsArray.bind(this);
+        this.showDialog = this.showDialog.bind(this);
         this.cancelDialog = this.cancelDialog.bind(this);
     }
 
@@ -53,25 +51,25 @@ class App extends Component {
     }
 
     toggleAddNewForm() {
-        this.state.displayNewForm
-            ? this.setState({displayNewForm: false})
-            : this.setState({displayNewForm: true})
+        this.setState({
+            dialogShown: true,
+        })
     }
 
     setName(newName) {
-        this.setState({newName: newName});
+        this.setState({leadName: newName});
     }
 
     setEmail(newEmail) {
-        this.setState({newEmail: newEmail});
+        this.setState({leadEmail: newEmail});
     }
 
     setMessage(newMessage) {
-        this.setState({newMessage: newMessage});
+        this.setState({leadMessage: newMessage});
     }
 
-    saveNewLead() {
-        fetch("api/saveNewLead", {
+    addEditLead() {
+        fetch("api/addEditLead", {
             method: 'POST',
             body: JSON.stringify(this.state)
         })
@@ -81,12 +79,12 @@ class App extends Component {
                         return {placeholder: "Something went wrong!"};
                     });
                 }
+                debugger;
                 location.reload();
             })
-
     };
 
-    removeLeadFunction () {
+    removeLeadFunction() {
         fetch("api/removeLeads", {
             method: 'POST',
             body: JSON.stringify({leads_to_remove: this.state.selected})
@@ -105,9 +103,9 @@ class App extends Component {
     updateSelectedLeadsArray(checkbox) {
         const id = checkbox.dataset.id;
         let current = this.state.selected;
-        if(current.indexOf(id) > -1) {
+        if (current.indexOf(id) > -1) {
             current.splice(current.indexOf(id), 1);
-        }else{
+        } else {
             current.push(id);
         }
 
@@ -115,35 +113,42 @@ class App extends Component {
 
     }
 
-    showDialog (data) {
+    showDialog(data, leadId) {
         const {
-            id,
-            name,
-            email,
-            message
+            leadName,
+            leadEmail,
+            leadMessage
         } = data;
 
         this.setState({
+            leadId: leadId,
             dialogShown: true,
-            dialogName: name,
-            dialogEmail: email,
-            dialogMessage: message,
+            leadName: leadName,
+            leadEmail: leadEmail,
+            leadMessage: leadMessage,
         });
 
     }
 
     cancelDialog() {
         this.setState({
+            leadId: 0,
             dialogShown: false,
-            dialogName: "",
-            dialogEmail: "",
-            dialogMessage: "",
+            leadName: "",
+            leadEmail: "",
+            leadMessage: "",
         })
     }
 
     render() {
         return (
             <React.Fragment>
+                <section>
+                    <h1>
+                        Dennis' Super Awesome Leads Sheet
+                    </h1>
+                </section>
+                <hr />
                 <ul>
                     {this.state.data.map(contact => {
                         return (
@@ -158,11 +163,10 @@ class App extends Component {
                                 />
                                 <button
                                     className="editButton"
-                                    data-name={contact.name}
-                                    data-email={contact.email}
-                                    data-message={contact.message}
-                                    data-id={contact.id}
-                                    onClick={(e) => this.showDialog(e.target.dataset)}
+                                    data-lead-name={contact.name}
+                                    data-lead-email={contact.email}
+                                    data-lead-message={contact.message}
+                                    onClick={(e) => this.showDialog(e.target.dataset, contact.id)}
                                 >
                                     edit
                                 </button>
@@ -174,26 +178,24 @@ class App extends Component {
                 </ul>
                 <button
                     id="addNewButton"
-                    onClick={this.toggleAddNewForm}
+                    onClick={() => this.showDialog(this.state, 0)}
                 >
                     Add New
                 </button>
                 <RemoveLeadButton
                     removeLeadFunction={this.removeLeadFunction}
                 />
-                <AddNewForm
-                    isDisplayed={this.state.displayNewForm}
+                <Dialog
+                    dialogShown={this.state.dialogShown}
+                    leadId={this.state.leadId}
+                    name={this.state.leadName}
+                    email={this.state.leadEmail}
+                    message={this.state.leadMessage}
                     setName={this.setName}
                     setEmail={this.setEmail}
                     setMessage={this.setMessage}
-                    saveNewLead={this.saveNewLead}
-                />
-                <Dialog
-                    dialogShown={this.state.dialogShown}
-                    name={this.state.dialogName}
-                    email={this.state.dialogEmail}
-                    message={this.state.dialogMessage}
                     cancelCallback={this.cancelDialog}
+                    confirmCallback={this.addEditLead}
                 />
             </React.Fragment>
         );

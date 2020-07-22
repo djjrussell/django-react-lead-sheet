@@ -10,13 +10,15 @@ class LeadListCreate(generics.ListCreateAPIView):
     serializer_class = LeadSerializer
 
 
-def add_new_lead(request):
+def add_edit_lead(request):
     data = request.body
     data = json.loads(data)
-    name = data['newName']
-    email = data['newEmail']
-    message = data['newMessage']
+    name = data['leadName']
+    email = data['leadEmail']
+    message = data['leadMessage']
     lead = Lead()
+    if data['leadId'] > 0:
+        lead.id = data['leadId']
     lead.name = name
     lead.email = email
     lead.message = message

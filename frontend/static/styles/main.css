@@ -14,12 +14,12 @@ ul {
     list-style-type: none;
 }
 
-button {
-    margin: .5em;
+ul li:hover {
+    font-weight: 300;
 }
 
-#dialogContainer {
-    position: relative;
+button {
+    margin: .5em;
 }
 
 #dialog {
@@ -29,6 +29,6 @@ button {
     position: absolute;
     margin: auto;
     padding: 1em;
-    top: 50%;
+    top: 10%;
     left: 25%;
 }
