@@ -41,6 +41,7 @@ class App extends Component {
                 return response.json();
             })
             .then(data => {
+                debugger;
                 this.setState(() => {
                     return {
                         data,
