@@ -31,7 +31,7 @@ class App extends Component {
     }
 
     componentDidMount() {
-        fetch("api/lead")
+        fetch("api/init")
             .then(response => {
                 if (response.status > 400) {
                     return this.setState(() => {
@@ -41,12 +41,10 @@ class App extends Component {
                 return response.json();
             })
             .then(data => {
-                debugger;
-                this.setState(() => {
-                    return {
-                        data,
-                        loaded: true
-                    };
+                this.setState({
+                    data: data.lead_data,
+                    company_data: data.company_data,
+                    loaded: true,
                 });
             });
     }
@@ -80,7 +78,6 @@ class App extends Component {
                         return {placeholder: "Something went wrong!"};
                     });
                 }
-                debugger;
                 location.reload();
             })
     };

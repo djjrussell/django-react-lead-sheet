@@ -1,13 +1,38 @@
 from django.http import HttpResponse
 import json
-from .models import Lead
-from .serializers import LeadSerializer
+from .models import *
+from .serializers import *
 from rest_framework import generics
-
 
 class LeadListCreate(generics.ListCreateAPIView):
     queryset = Lead.objects.all()
     serializer_class = LeadSerializer
+
+
+class CompanyListCreate(generics.ListCreateAPIView):
+    queryset = Company.objects.all()
+    serializer_class = CompanySerializer
+
+
+def init(request):
+    leads = Lead.objects.select_related('company').all()
+    output = {
+        'lead_data': [],
+        'company_data': [],
+    }
+    for lead in leads:
+        output['lead_data'].append({
+            'id': lead.id,
+            'name': lead.name,
+            'email': lead.email,
+            'message': lead.message,
+        })
+        output['company_data'].append({
+            'company_name': lead.company.name if lead.company.name else "",
+            'company_id': lead.company.id if lead.company.name else "",
+        })
+    output_string = json.dumps(output)
+    return HttpResponse(output_string)
 
 
 def add_edit_lead(request):
