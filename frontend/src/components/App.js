@@ -8,15 +8,19 @@ class App extends Component {
         super(props);
         this.state = {
             data: [],
+            companyData: [],
             loaded: false,
             placeholder: "Loading",
             displayNewForm: false,
             selected: [],
             dialogShown: false,
-            leadId: 0,
+            leadId: -1,
             leadName: "",
             leadEmail: "",
             leadMessage: "",
+            companyId: -1,
+            companyName: "",
+            companyAddress: "",
         };
 
         this.toggleAddNewForm = this.toggleAddNewForm.bind(this);
@@ -28,6 +32,8 @@ class App extends Component {
         this.updateSelectedLeadsArray = this.updateSelectedLeadsArray.bind(this);
         this.showDialog = this.showDialog.bind(this);
         this.cancelDialog = this.cancelDialog.bind(this);
+        this.setCompanyName = this.setCompanyName.bind(this);
+        this.setCompanyAddress = this.setCompanyAddress.bind(this);
     }
 
     componentDidMount() {
@@ -43,7 +49,7 @@ class App extends Component {
             .then(data => {
                 this.setState({
                     data: data.lead_data,
-                    company_data: data.company_data,
+                    companyData: data.company_data,
                     loaded: true,
                 });
             });
@@ -65,6 +71,16 @@ class App extends Component {
 
     setMessage(newMessage) {
         this.setState({leadMessage: newMessage});
+    }
+
+    setCompanyName(newCompanyName) {
+        this.setState({companyName: newCompanyName})
+    }
+
+    setCompanyAddress(newCompanyAddress) {
+        this.setState({
+            companyAddress: newCompanyAddress
+        })
     }
 
     addEditLead() {
@@ -112,6 +128,7 @@ class App extends Component {
     }
 
     showDialog(data, leadId) {
+
         const {
             leadName,
             leadEmail,
@@ -146,12 +163,12 @@ class App extends Component {
                         Dennis' Super Awesome Leads Sheet
                     </h1>
                 </section>
-                <hr />
+                <hr/>
                 <ul>
                     {this.state.data.map(contact => {
                         return (
                             <li key={contact.id}>
-                                {contact.name} - {contact.email} - {contact.message}
+                                {contact.lead_name} - {contact.lead_email} - {contact.lead_message}
                                 <input
                                     type="checkbox"
                                     name={contact.id}
@@ -161,9 +178,9 @@ class App extends Component {
                                 />
                                 <button
                                     className="editButton"
-                                    data-lead-name={contact.name}
-                                    data-lead-email={contact.email}
-                                    data-lead-message={contact.message}
+                                    data-lead-name={contact.lead_name}
+                                    data-lead-email={contact.lead_email}
+                                    data-lead-message={contact.lead_message}
                                     onClick={(e) => this.showDialog(e.target.dataset, contact.id)}
                                 >
                                     edit
@@ -186,14 +203,20 @@ class App extends Component {
                 <Dialog
                     dialogShown={this.state.dialogShown}
                     leadId={this.state.leadId}
+                    companyId={this.state.companyId}
                     name={this.state.leadName}
                     email={this.state.leadEmail}
                     message={this.state.leadMessage}
+                    companyName={this.state.companyName}
+                    companyAddress={this.state.companyAddress}
                     setName={this.setName}
                     setEmail={this.setEmail}
                     setMessage={this.setMessage}
+                    setCompanyName={this.setCompanyName}
+                    setCompanyAddress={this.setCompanyAddress}
                     cancelCallback={this.cancelDialog}
                     confirmCallback={this.addEditLead}
+                    companyData={this.state.companyData}
                 />
             </React.Fragment>
         );

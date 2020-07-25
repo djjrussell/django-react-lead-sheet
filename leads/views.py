@@ -16,21 +16,30 @@ class CompanyListCreate(generics.ListCreateAPIView):
 
 def init(request):
     leads = Lead.objects.select_related('company').all()
+
     output = {
         'lead_data': [],
         'company_data': [],
     }
+
     for lead in leads:
         output['lead_data'].append({
             'id': lead.id,
-            'name': lead.name,
-            'email': lead.email,
-            'message': lead.message,
-        })
-        output['company_data'].append({
+            'lead_name': lead.name,
+            'lead_email': lead.email,
+            'lead_message': lead.message,
             'company_name': lead.company.name if lead.company.name else "",
             'company_id': lead.company.id if lead.company.name else "",
         })
+
+    companies = Company.objects.all()
+
+    for company in companies:
+        output['company_data'].append({
+            'name': company.name,
+            'id': company.id,
+        })
+
     output_string = json.dumps(output)
     return HttpResponse(output_string)
 

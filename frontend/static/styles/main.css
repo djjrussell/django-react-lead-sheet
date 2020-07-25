@@ -32,3 +32,14 @@ button {
     top: 10%;
     left: 25%;
 }
+
+.panel {
+    display: inline-block;
+    vertical-align: top;
+    height: 200px;
+    padding: 20px;
+}
+
+.right {
+    border-left: 1px solid grey;
+}
