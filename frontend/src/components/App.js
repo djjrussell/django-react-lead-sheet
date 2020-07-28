@@ -177,8 +177,9 @@ class App extends Component {
         return (
             <React.Fragment>
                 <section>
+                    <div id="logoMain"/>
                     <h1>
-                        Dennis' Super Awesome Leads Sheet
+                        Boxer Leads
                     </h1>
                 </section>
                 <hr/>
@@ -195,7 +196,7 @@ class App extends Component {
                     </tr>
                     {this.state.data.map(contact => {
                         return (
-                            <tr>
+                            <tr className="actionableRow">
                                 <td key={contact.id}>{contact.id}</td>
                                 <td>{contact.lead_name}</td>
                                 <td>{contact.lead_email}</td>

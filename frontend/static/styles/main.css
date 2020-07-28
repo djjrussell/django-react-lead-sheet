@@ -25,8 +25,10 @@ button {
 }
 
 h1 {
+    display: inline-block;
     font-weight: 100;
     text-align: center;
+    margin: 1em;
 }
 
 #dialog {
@@ -64,4 +66,23 @@ h1 {
     text-align: center;
     border: 1px solid #EDEDED;
     border-collapse: collapse;
+}
+
+#logoMain {
+    background-image: url("../images/boxer.svg");
+    height: 100px;
+    width: 100px;
+    float: left;
+    border: none !important;
+    stroke: grey;
+}
+
+svg {
+    fill: grey;
+    stroke: grey !important;
+}
+
+#mainDisplayTable tr.actionableRow:hover {
+    border: 3px solid #FFF;
+    cursor: pointer;
 }
