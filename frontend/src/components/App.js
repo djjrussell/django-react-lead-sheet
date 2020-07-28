@@ -56,6 +56,7 @@ class App extends Component {
                     companyData: data.company_data,
                     loaded: true,
                 });
+                debugger;
             });
     }
 
@@ -186,7 +187,7 @@ class App extends Component {
                     {this.state.data.map(contact => {
                         return (
                             <li key={contact.id}>
-                                {contact.lead_name} - {contact.lead_email} - {contact.lead_message}
+                                {contact.lead_name} - {contact.lead_email} - {contact.lead_message} - {this.state.companyData[contact.company_id]}
                                 <input
                                     type="checkbox"
                                     name={contact.id}
