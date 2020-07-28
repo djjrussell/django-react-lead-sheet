@@ -56,7 +56,6 @@ class App extends Component {
                     companyData: data.company_data,
                     loaded: true,
                 });
-                debugger;
             });
     }
 
@@ -183,34 +182,52 @@ class App extends Component {
                     </h1>
                 </section>
                 <hr/>
-                <ul>
+                {/*<ul>*/}
+                <table id="mainDisplayTable">
+                    <tr>
+                        <th>Contact ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Message</th>
+                        <th>Company</th>
+                        <th>Delete</th>
+                        <th></th>
+                    </tr>
                     {this.state.data.map(contact => {
                         return (
-                            <li key={contact.id}>
-                                {contact.lead_name} - {contact.lead_email} - {contact.lead_message} - {this.state.companyData[contact.company_id]}
-                                <input
-                                    type="checkbox"
-                                    name={contact.id}
-                                    data-id={contact.id}
-                                    className="leadCheckbox"
-                                    onChange={(e) => this.updateSelectedLeadsArray(e.target)}
-                                />
-                                <button
-                                    className="editButton"
-                                    data-lead-name={contact.lead_name}
-                                    data-lead-email={contact.lead_email}
-                                    data-lead-message={contact.lead_message}
-                                    data-company-id={contact.company_id}
-                                    onClick={(e) => this.showDialog(e.target.dataset, contact.id)}
-                                >
-                                    edit
-                                </button>
-                            </li>
+                            <tr>
+                                <td key={contact.id}>{contact.id}</td>
+                                <td>{contact.lead_name}</td>
+                                <td>{contact.lead_email}</td>
+                                <td>{contact.lead_message}</td>
+                                <td>{this.state.companyData[contact.company_id]}</td>
+                                <td>
+                                    <input
+                                        type="checkbox"
+                                        name={contact.id}
+                                        data-id={contact.id}
+                                        className="leadCheckbox"
+                                        onChange={(e) => this.updateSelectedLeadsArray(e.target)}
+                                    />
+                                </td>
+                                <td>
+                                    <button
+                                        className="editButton"
+                                        data-lead-name={contact.lead_name}
+                                        data-lead-email={contact.lead_email}
+                                        data-lead-message={contact.lead_message}
+                                        data-company-id={contact.company_id}
+                                        onClick={(e) => this.showDialog(e.target.dataset, contact.id)}
+                                    >
+                                        Edit
+                                    </button>
+                                </td>
+                            </tr>
+                        )
 
-
-                        );
                     })}
-                </ul>
+                </table>
+                {/*</ul>*/}
                 <button
                     id="addNewButton"
                     onClick={() => this.showDialog(this.state, 0)}

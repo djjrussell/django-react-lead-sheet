@@ -1,7 +1,7 @@
 body {
     background-color: lightgray;
     color: #444444;
-    font-weight: 100;
+    font-weight: 200;
     font-size: 1.5em;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
@@ -10,16 +10,23 @@ label {
     display: block
 }
 
-ul {
-    list-style-type: none;
-}
-
-ul li:hover {
+table tr:hover {
     font-weight: 300;
 }
 
 button {
     margin: .5em;
+    background-color: #6f7c8b;
+    color: white;
+    font-weight: 100;
+    padding: 10px;
+    font-size: .7em;
+    border-radius: 5px;
+}
+
+h1 {
+    font-weight: 100;
+    text-align: center;
 }
 
 #dialog {
@@ -36,11 +43,25 @@ button {
 .panel {
     display: inline-block;
     vertical-align: top;
-    height: 200px;
+    height: 300px;
     padding: 20px;
     width: 40%;
 }
 
 .right {
     border-left: 1px solid grey;
+}
+
+#mainDisplayTable{
+    font-size: .75em;
+    border-collapse: collapse;
+}
+
+#mainDisplayTable tr,
+#mainDisplayTable tr td,
+#mainDisplayTable tr th{
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #EDEDED;
+    border-collapse: collapse;
 }
