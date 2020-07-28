@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 
 const Dialog = (props) => {
 
@@ -12,6 +12,7 @@ const Dialog = (props) => {
         setName,
         setEmail,
         setMessage,
+        setCompanyId,
         setCompanyName,
         setCompanyAddress,
         cancelCallback,
@@ -19,13 +20,13 @@ const Dialog = (props) => {
         companyData,
         companyName,
         companyAddress,
+        companyIsNew,
+        setCompanyIsNew,
     } = props;
 
     const style = {
         display: dialogShown ? "block" : "none",
     };
-
-    const [addCompanyShown, toggleAddCompanyShown] = useState(false);
 
     return (
         <div id="dialogContainer">
@@ -50,23 +51,21 @@ const Dialog = (props) => {
                 <div className="panel right">
                     <label className="dialogLabel">
                         <div className="dialogTitle">Company</div>
-                        <select value={companyId}>
+                        <select onChange={(e) => setCompanyId(e.target.value)} value={companyId} style={{visibility: companyIsNew ? "hidden" : "visible"}}>
                             <option value="-1">Select</option>
                             {
-                                companyData.map(company => {
+                                Object.keys(companyData).map(id => {
                                     return (
-                                        <option value={company.id}>{company.name}</option>
+                                        <option value={id}>{companyData[id]}</option>
                                     )
                                 })
                             }
                         </select>
                         <span>
-                            <button id="addNewCompany" onClick={() => {
-                                toggleAddCompanyShown(addCompanyShown !== true)
-                            }}>Add New</button>
+                            <button id="addNewCompany" onClick={setCompanyIsNew}>Add New</button>
                         </span>
                     </label>
-                    <div id="addCompanyPanel" style={{display: addCompanyShown ? "block" : "none"}}>
+                    <div id="addCompanyPanel" style={{display: companyIsNew ? "block" : "none"}}>
                         <label className="dialogLabel">
                             <div className="dialogTitle">Name</div>
                             <input id="companyName" defaultValue={companyName}

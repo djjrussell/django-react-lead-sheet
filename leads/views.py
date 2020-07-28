@@ -19,7 +19,7 @@ def init(request):
 
     output = {
         'lead_data': [],
-        'company_data': [],
+        'company_data': {},
     }
 
     for lead in leads:
@@ -30,15 +30,13 @@ def init(request):
             'lead_message': lead.message,
             'company_name': lead.company.name if lead.company.name else "",
             'company_id': lead.company.id if lead.company.name else "",
+            'company_address': lead.company.address if lead.company.address else "",
         })
 
     companies = Company.objects.all()
 
     for company in companies:
-        output['company_data'].append({
-            'name': company.name,
-            'id': company.id,
-        })
+        output['company_data'][company.pk] = company.name
 
     output_string = json.dumps(output)
     return HttpResponse(output_string)
@@ -51,8 +49,20 @@ def add_edit_lead(request):
     email = data['leadEmail']
     message = data['leadMessage']
     lead = Lead()
+
     if data['leadId'] > 0:
         lead.id = data['leadId']
+
+    if data['companyIsNew']:
+        company = Company()
+        company.name = data['companyName']
+        company.address = data['companyAddress']
+        company.save()
+        company_id = company.pk
+    else:
+        company_id = data['companyId']
+
+    lead.company_id = company_id
     lead.name = name
     lead.email = email
     lead.message = message

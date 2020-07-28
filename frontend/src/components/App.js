@@ -8,19 +8,20 @@ class App extends Component {
         super(props);
         this.state = {
             data: [],
-            companyData: [],
+            companyData: {},
             loaded: false,
             placeholder: "Loading",
             displayNewForm: false,
             selected: [],
             dialogShown: false,
             leadId: -1,
+            companyId: -1,
             leadName: "",
             leadEmail: "",
             leadMessage: "",
-            companyId: -1,
             companyName: "",
             companyAddress: "",
+            companyIsNew: false,
         };
 
         this.toggleAddNewForm = this.toggleAddNewForm.bind(this);
@@ -32,11 +33,14 @@ class App extends Component {
         this.updateSelectedLeadsArray = this.updateSelectedLeadsArray.bind(this);
         this.showDialog = this.showDialog.bind(this);
         this.cancelDialog = this.cancelDialog.bind(this);
+        this.setCompanyId = this.setCompanyId.bind(this);
         this.setCompanyName = this.setCompanyName.bind(this);
         this.setCompanyAddress = this.setCompanyAddress.bind(this);
+        this.setCompanyIsNew = this.setCompanyIsNew.bind(this);
     }
 
     componentDidMount() {
+
         fetch("api/init")
             .then(response => {
                 if (response.status > 400) {
@@ -73,6 +77,10 @@ class App extends Component {
         this.setState({leadMessage: newMessage});
     }
 
+    setCompanyId(newCompanyId) {
+        this.setState({companyId: newCompanyId})
+    }
+    
     setCompanyName(newCompanyName) {
         this.setState({companyName: newCompanyName})
     }
@@ -83,7 +91,14 @@ class App extends Component {
         })
     }
 
+    setCompanyIsNew() {
+        this.setState({
+            companyIsNew: this.state.companyIsNew !== true
+        })
+    }
+
     addEditLead() {
+
         fetch("api/addEditLead", {
             method: 'POST',
             body: JSON.stringify(this.state)
@@ -132,11 +147,13 @@ class App extends Component {
         const {
             leadName,
             leadEmail,
-            leadMessage
+            leadMessage,
+            companyId,
         } = data;
 
         this.setState({
             leadId: leadId,
+            companyId: companyId,
             dialogShown: true,
             leadName: leadName,
             leadEmail: leadEmail,
@@ -147,7 +164,8 @@ class App extends Component {
 
     cancelDialog() {
         this.setState({
-            leadId: 0,
+            leadId: -1,
+            companyId: -1,
             dialogShown: false,
             leadName: "",
             leadEmail: "",
@@ -181,6 +199,7 @@ class App extends Component {
                                     data-lead-name={contact.lead_name}
                                     data-lead-email={contact.lead_email}
                                     data-lead-message={contact.lead_message}
+                                    data-company-id={contact.company_id}
                                     onClick={(e) => this.showDialog(e.target.dataset, contact.id)}
                                 >
                                     edit
@@ -212,11 +231,14 @@ class App extends Component {
                     setName={this.setName}
                     setEmail={this.setEmail}
                     setMessage={this.setMessage}
+                    setCompanyId={this.setCompanyId}
                     setCompanyName={this.setCompanyName}
                     setCompanyAddress={this.setCompanyAddress}
                     cancelCallback={this.cancelDialog}
                     confirmCallback={this.addEditLead}
                     companyData={this.state.companyData}
+                    companyIsNew={this.state.companyIsNew}
+                    setCompanyIsNew={this.setCompanyIsNew}
                 />
             </React.Fragment>
         );
