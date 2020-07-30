@@ -1,8 +1,9 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 import json
 from .models import *
 from .serializers import *
 from rest_framework import generics
+from django.shortcuts import redirect
 
 
 class LeadListCreate(generics.ListCreateAPIView):
@@ -15,8 +16,21 @@ class CompanyListCreate(generics.ListCreateAPIView):
     serializer_class = CompanySerializer
 
 
+class UserListCreate(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
 def init(request):
-    leads = Lead.objects.select_related('company').all()
+    if 'user_pk' not in request.COOKIES:
+        return HttpResponseForbidden('failure')
+
+    user_pk = request.COOKIES['user_pk']
+
+    if not user_pk:
+        return HttpResponseForbidden('failure')
+
+    leads = Lead.objects.filter(user_id=user_pk).select_related('company').all()
 
     output = {
         'lead_data': [],
@@ -40,7 +54,24 @@ def init(request):
         output['company_data'][company.pk] = company.name
 
     output_string = json.dumps(output)
-    return HttpResponse(output_string)
+    response = HttpResponse(output_string)
+    return response
+
+
+def login(request):
+    data = request.body
+    data = json.loads(data)
+    username = data['username']
+    password = data['password']
+
+    user = User.objects.filter(username=username).get()
+
+    if user.password == password:
+        response = HttpResponse('success')
+        response.set_cookie('user_pk', user.pk)
+    else:
+        response = HttpResponse('failure')
+    return response
 
 
 def add_edit_lead(request):

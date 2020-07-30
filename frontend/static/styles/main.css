@@ -93,3 +93,27 @@ svg {
     border: 3px solid #FFF;
     cursor: pointer;
 }
+
+#credentialsContainer {
+    display: block;
+    width: 200px;
+    margin: 0 auto;
+}
+
+#logoSection {
+    display: block;
+    width: 200px;
+    margin: 5em auto 0 auto;
+}
+
+#logoLogin {
+    background-image: url("../images/boxer.svg");
+    height: 150px;
+    width: 150px;
+    border: none !important;
+    stroke: grey;
+}
+
+#loginButton {
+    margin: 5px 20%;
+}

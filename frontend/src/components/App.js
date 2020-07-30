@@ -41,9 +41,10 @@ class App extends Component {
 
     componentDidMount() {
 
-        fetch("api/init")
+        fetch("/api/init")
             .then(response => {
                 if (response.status > 400) {
+                    self.location = '/';
                     return this.setState(() => {
                         return {placeholder: "Something went wrong!"};
                     });
@@ -80,7 +81,7 @@ class App extends Component {
     setCompanyId(newCompanyId) {
         this.setState({companyId: newCompanyId})
     }
-    
+
     setCompanyName(newCompanyName) {
         this.setState({companyName: newCompanyName})
     }
@@ -173,6 +174,11 @@ class App extends Component {
         })
     }
 
+    logout() {
+        document.cookie = "user_pk=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        self.location = "/";
+    }
+
     render() {
         return (
             <React.Fragment>
@@ -181,6 +187,9 @@ class App extends Component {
                     <h1>
                         Boxer Leads
                     </h1>
+                    <div id="logout">
+                        <button onClick={this.logout}>Log Out</button>
+                    </div>
                 </section>
                 <hr/>
                 {/*<ul>*/}
@@ -267,4 +276,7 @@ class App extends Component {
 export default App;
 
 const container = document.getElementById("app");
-render(<App/>, container);
+
+if (container !== null) {
+    render(<App/>, container);
+}
