@@ -7,6 +7,7 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            userId: -1,
             data: [],
             companyData: {},
             loaded: false,
@@ -53,6 +54,7 @@ class App extends Component {
             })
             .then(data => {
                 this.setState({
+                    userId: data.user_id,
                     data: data.lead_data,
                     companyData: data.company_data,
                     loaded: true,
@@ -100,7 +102,7 @@ class App extends Component {
 
     addEditLead() {
 
-        fetch("api/addEditLead", {
+        fetch("/api/addEditLead", {
             method: 'POST',
             body: JSON.stringify(this.state)
         })
@@ -115,7 +117,7 @@ class App extends Component {
     };
 
     removeLeadFunction() {
-        fetch("api/removeLeads", {
+        fetch("/api/removeLeads", {
             method: 'POST',
             body: JSON.stringify({leads_to_remove: this.state.selected})
         })
@@ -187,9 +189,7 @@ class App extends Component {
                     <h1>
                         Boxer Leads
                     </h1>
-                    <div id="logout">
-                        <button onClick={this.logout}>Log Out</button>
-                    </div>
+                        <button id="logoutButton" onClick={this.logout}>Log Out</button>
                 </section>
                 <hr/>
                 {/*<ul>*/}

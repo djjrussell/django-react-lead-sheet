@@ -117,3 +117,7 @@ svg {
 #loginButton {
     margin: 5px 20%;
 }
+
+#logoutButton{
+    float: right;
+}

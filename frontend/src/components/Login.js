@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {render} from "react-dom";
 
 const Login = () => {
@@ -9,6 +9,17 @@ const Login = () => {
     const failure = () => {
         alert('wrong username or password');
     };
+
+    const handleEnter = (keycode) => {
+        if (keycode === 13) {
+            login();
+        }
+    };
+
+    useEffect(() => {
+        document.body.addEventListener('keyup', (e) => handleEnter(e.keyCode));
+    });
+
 
     const login = () => {
 

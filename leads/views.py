@@ -33,6 +33,7 @@ def init(request):
     leads = Lead.objects.filter(user_id=user_pk).select_related('company').all()
 
     output = {
+        'user_id': user_pk,
         'lead_data': [],
         'company_data': {},
     }
@@ -80,6 +81,7 @@ def add_edit_lead(request):
     name = data['leadName']
     email = data['leadEmail']
     message = data['leadMessage']
+    user_id = data['userId']
     lead = Lead()
 
     if data['leadId'] > 0:
@@ -93,7 +95,7 @@ def add_edit_lead(request):
         company_id = company.pk
     else:
         company_id = data['companyId']
-
+    lead.user_id = user_id
     lead.company_id = company_id
     lead.name = name
     lead.email = email
