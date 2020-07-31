@@ -192,7 +192,6 @@ class App extends Component {
                         <button id="logoutButton" onClick={this.logout}>Log Out</button>
                 </section>
                 <hr/>
-                {/*<ul>*/}
                 <table id="mainDisplayTable">
                     <tr>
                         <th>Contact ID</th>
@@ -237,7 +236,6 @@ class App extends Component {
 
                     })}
                 </table>
-                {/*</ul>*/}
                 <button
                     id="addNewButton"
                     onClick={() => this.showDialog(this.state, 0)}
@@ -268,6 +266,10 @@ class App extends Component {
                     companyIsNew={this.state.companyIsNew}
                     setCompanyIsNew={this.setCompanyIsNew}
                 />
+                <hr />
+                <section>
+                    <h6 className="footer">Created By Dennis Russell djjrussell@gmail.com. github.com/djjrussell</h6>
+                </section>
             </React.Fragment>
         );
     }
