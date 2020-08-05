@@ -29,7 +29,7 @@ const Login = () => {
                 username: username,
                 password: password,
             })
-        }).then(response => {
+        }).then(response => {``
             if (response.status > 400) {
                 failure();
             }else{

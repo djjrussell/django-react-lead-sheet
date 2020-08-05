@@ -1,4 +1,5 @@
 from django.http import HttpResponse, HttpResponseForbidden
+from decimal import Decimal
 import json
 from .models import *
 from .serializers import *
@@ -113,3 +114,36 @@ def remove_leads(request):
     leads_to_remove.delete()
     return HttpResponse('success')
 
+
+def get_sales(request):
+    data = request.body
+    data = json.loads(data)
+    lead_id = data['lead_id']
+    transactions = Transaction.objects.filter(lead_id=lead_id).select_related('lead').select_related('user').all()
+    output = {
+        'user_data': {
+            'first_name': transactions[0].user.first_name,
+            'last_name': transactions[0].user.last_name,
+            'email': transactions[0].user.email,
+            'id': transactions[0].user.pk
+        },
+        'lead_data': {
+            'name': transactions[0].lead.name,
+            'company': transactions[0].lead.company.name,
+            'company_address': transactions[0].lead.company.address,
+            'email': transactions[0].lead.email,
+            'tax_id': transactions[0].lead.tax_id,
+        },
+        'transactions': []
+    }
+
+    for t in transactions:
+        output['transactions'].append({
+            'id': t.id,
+            'amount': str(Decimal(t.amount)),
+            'datetime': t.datetime,
+        })
+
+    output_string = json.dumps(output)
+    response = HttpResponse(output_string)
+    return response

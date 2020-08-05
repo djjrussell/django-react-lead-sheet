@@ -39,5 +39,7 @@ class Lead(models.Model):
 
 class Transaction(models.Model):
     lead = models.ForeignKey('Lead', on_delete=models.SET_NULL, null=True, blank=True)
+    user = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, blank=True)
     amount = models.DecimalField(max_digits=13, decimal_places=4, null=True, blank=True)
+    datetime = models.DateTimeField(auto_now_add=True, null=True)
 
